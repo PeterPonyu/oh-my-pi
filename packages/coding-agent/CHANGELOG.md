@@ -2,11 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added `context.stopAtRepoRoot` to clamp standalone `AGENTS.md` / `CLAUDE.md` discovery at the git repository root instead of walking through enclosing workspace directories up to `$HOME`. The default remains the walk-to-home behavior ([#11357](https://github.com/can1357/oh-my-pi/issues/11357)).
+
 ## [18.1.16] - 2026-09-09
 
 ### Added
 
-- Added `context.stopAtRepoRoot` to clamp standalone `AGENTS.md` / `CLAUDE.md` discovery at the git repository root instead of walking through enclosing workspace directories up to `$HOME`. The default remains the walk-to-home behavior ([#11357](https://github.com/can1357/oh-my-pi/issues/11357)).
 - `/rename` without a title now generates a session name from recent conversation using the configured tiny model.
 - Added opt-in experimental notes-backed context windows with persistent branch-local notes, searchable original session history, retained latest user requests, and a model-callable rollover tool, including in Code Mode.
 - `/loop` accepts `--until '<cmd>'` / `--while '<cmd>'` to gate each iteration on a shell command's exit status, so a loop can stop on real project state instead of only a count or duration. ([#10858](https://github.com/can1357/oh-my-pi/pull/10858) by [@andyhite](https://github.com/andyhite))
