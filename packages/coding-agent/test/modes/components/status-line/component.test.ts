@@ -1,4 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
+import * as vcs from "@oh-my-pi/pi-natives/vcs";
+import { getProjectDir } from "@oh-my-pi/pi-utils";
 import { createGallerySegmentContext } from "../../../../src/cli/gallery-fixtures/segments";
 import { Settings } from "../../../../src/config/settings";
 import { StatusLineComponent } from "../../../../src/modes/components/status-line/component";
@@ -16,6 +18,11 @@ import { StatusLineTestComponents } from "../../../helpers/status-line";
 // truncation tests that target it directly.
 const WIDE_ENOUGH_FOR_COST_SEGMENT = 400;
 const statusLines = new StatusLineTestComponents();
+
+/** Same linked-worktree check `pathSegment` uses via `resolveWorktreeContext(getProjectDir())`. */
+function startupPathPlaceholderIcon(): string {
+	return vcs.git(getProjectDir())?.linkedWorktree() ? theme.icon.worktree : theme.icon.folder;
+}
 
 function makeSessionWithLastMessage(
 	lastMessage: unknown,
@@ -145,7 +152,7 @@ describe("StatusLineComponent", () => {
 		const placeholder = Bun.stripANSI(statusLine.renderStartupPlaceholder(WIDE_ENOUGH_FOR_COST_SEGMENT, "box"));
 		expect(placeholder.match(/…/g)?.length).toBeGreaterThanOrEqual(3);
 		expect(placeholder).toContain(`${theme.icon.model} …`);
-		expect(placeholder).toContain(`${theme.icon.folder} …`);
+		expect(placeholder).toContain(`${startupPathPlaceholderIcon()} …`);
 		expect(placeholder).toContain("$…");
 		expect(placeholder).not.toContain("Stale Model");
 		expect(placeholder).not.toContain("stale-session");
