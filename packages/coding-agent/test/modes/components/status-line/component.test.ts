@@ -19,7 +19,16 @@ import { StatusLineTestComponents } from "../../../helpers/status-line";
 const WIDE_ENOUGH_FOR_COST_SEGMENT = 400;
 const statusLines = new StatusLineTestComponents();
 
-/** Same linked-worktree check `pathSegment` uses via `resolveWorktreeContext(getProjectDir())`. */
+/**
+ * Same linked-worktree check `pathSegment` uses via `resolveWorktreeContext(getProjectDir())`.
+ *
+ * Assumes this checkout has no `activeRepo` (single-direct-child repo).
+ * Production sets `ctx.worktree` to null whenever `activeRepo` is set
+ * (`component.ts` `#resolveActiveRepoCache`), and only then selects
+ * `icon.worktree` when `stripPrefix && ctx.worktree`. This helper does not
+ * re-implement that gate; if `getProjectDir()` ever resolved through an
+ * `activeRepo`, it would predict `worktree` while production renders `folder`.
+ */
 function startupPathPlaceholderIcon(): string {
 	return vcs.git(getProjectDir())?.linkedWorktree() ? theme.icon.worktree : theme.icon.folder;
 }
